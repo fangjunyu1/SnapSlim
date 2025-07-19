@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  SnapSlim
+
+  Created by 方君宇 on 2025/7/19.
+  
+*/
+
+"CFBundleName" = "SnapSlim";
+"CFBundleDisplayName" = "SnapSlim";

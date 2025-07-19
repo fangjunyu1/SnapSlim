@@ -91,6 +91,60 @@
 			knownRegions = (
 				en,
 				Base,
+				ar,
+				bn,
+				bg,
+				ca,
+				"zh-HK",
+				"zh-Hans",
+				"zh-Hant",
+				hr,
+				cs,
+				da,
+				nl,
+				"en-AU",
+				"en-IN",
+				"en-GB",
+				fi,
+				fr,
+				"fr-CA",
+				de,
+				el,
+				gu,
+				he,
+				hi,
+				hu,
+				id,
+				it,
+				ja,
+				kn,
+				kk,
+				uk,
+				vi,
+				tr,
+				ur,
+				te,
+				sv,
+				"es-419",
+				es,
+				"es-US",
+				sk,
+				ru,
+				pa,
+				ro,
+				"pt-PT",
+				"pt-BR",
+				nb,
+				ko,
+				or,
+				mr,
+				lt,
+				ms,
+				ml,
+				pl,
+				sl,
+				ta,
+				th,
 			);
 			mainGroup = 1D0BD6C22E2B78AD00330232;
 			minimizedProjectReferenceProxies = 1;
@@ -185,6 +239,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -242,6 +297,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 			};
 			name = Release;
 		};
@@ -263,7 +319,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				MARKETING_VERSION = 0.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fangjunyu.SnapSlim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -290,7 +347,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.4;
+				MARKETING_VERSION = 0.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.fangjunyu.SnapSlim;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
