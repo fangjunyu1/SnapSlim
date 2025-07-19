@@ -3,6 +3,12 @@
   "strings" : {
     "Hello, world!" : {
 
+    },
+    "Open" : {
+      "comment" : "退出应用程序的菜单项标题"
+    },
+    "Quit" : {
+      "comment" : "退出应用程序的菜单项标题"
     }
   },
   "version" : "1.0"
