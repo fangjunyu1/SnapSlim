@@ -10,11 +10,15 @@ import SwiftUI
 import Combine
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    var statusBarController: StatusBarController?
     var cancellables = Set<AnyCancellable>()
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         
+        // 创建状态栏
+        _ = StatusBarController.shared
+        
+        // 设置为辅助App，无 Dock 图标、无菜单栏（菜单栏可自建）。
+        NSApp.setActivationPolicy(.accessory)
         let contentVC = NSHostingController(rootView: ContentView())
         let workspaceVC = NSHostingController(rootView: ContentView())
         
@@ -56,7 +60,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationWillTerminate(_ notification: Notification) {
         print("应用即将退出，清除状态栏图标")
-        statusBarController?.removeFromStatusBar()
-        statusBarController = nil
+        StatusBarController.shared.removeFromStatusBar()
+        // statusBarController = nil
     }
 }

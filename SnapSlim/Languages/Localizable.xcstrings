@@ -5,10 +5,26 @@
 
     },
     "Open" : {
-      "comment" : "退出应用程序的菜单项标题"
+      "comment" : "退出应用程序的菜单项标题",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开"
+          }
+        }
+      }
     },
     "Quit" : {
-      "comment" : "退出应用程序的菜单项标题"
+      "comment" : "退出应用程序的菜单项标题",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "退出"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

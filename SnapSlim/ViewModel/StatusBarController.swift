@@ -9,9 +9,11 @@ import AppKit
 import SwiftUI
 
 class StatusBarController:ObservableObject {
+    static let shared = StatusBarController()
     private var statusItem: NSStatusItem?
     
     init() {
+        print("进入 StatusBarController 方法")
         // 创建系统菜单栏图标
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         // 添加菜单栏菜单
