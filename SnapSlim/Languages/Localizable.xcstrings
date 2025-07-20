@@ -25,6 +25,33 @@
           }
         }
       }
+    },
+    "ScreenShot" : {
+      "extractionState" : "manual"
+    },
+    "SnapSlim" : {
+      "comment" : "应用名称",
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "轻截图片"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "輕截圖片"
+          }
+        },
+        "zh-HK" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "輕截圖片"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

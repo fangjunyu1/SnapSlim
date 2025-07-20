@@ -15,7 +15,7 @@ class StatusBarController:ObservableObject {
     init() {
         print("进入 StatusBarController 方法")
         // 创建系统菜单栏图标
-        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
+        statusItem = NSStatusBar.system.statusItem(withLength: 18)
         // 添加菜单栏菜单
         if let status = statusItem {
             if let button = status.button {
@@ -26,14 +26,22 @@ class StatusBarController:ObservableObject {
             // 创建菜单
             let menu = NSMenu()
             
-            let openTitle = NSLocalizedString("Open", comment: "退出应用程序的菜单项标题")
-            let openItem = NSMenuItem(title: openTitle, action: #selector(openApp), keyEquivalent: "o")
-            openItem.target = self
+            // 截图
+            let screenShotTitle = NSLocalizedString("ScreenShot", comment: "截图")
+            let screenShotItem = NSMenuItem(title: screenShotTitle, action: #selector(screenshot), keyEquivalent: "o")
+            screenShotItem.target = self
+            menu.addItem(screenShotItem)
             
-            menu.addItem(openItem)
+            // 插入分割线
+            menu.addItem(NSMenuItem.separator())
             
-            let separator = NSMenuItem.separator()
-            menu.addItem(separator)
+            // 应用信息
+            let appInfoTitle = NSLocalizedString("SnapSlim", comment: "应用名称")
+            let appInfoItem = NSMenuItem(title: "\(appInfoTitle)",action: nil,keyEquivalent: "")
+            menu.addItem(appInfoItem)
+            
+            // 插入分割线
+            menu.addItem(NSMenuItem.separator())
             
             let quitTitle = NSLocalizedString("Quit", comment: "退出应用程序的菜单项标题")
             let quitItem = NSMenuItem(title: quitTitle, action: #selector(NSApp.terminate(_:)), keyEquivalent: "q")
@@ -46,12 +54,17 @@ class StatusBarController:ObservableObject {
         
     }
     
-    @objc func openApp() {
-        if let window = WindowManager.shared.mainWindow {
-            window.makeKeyAndOrderFront(nil)
-        } else {
-            print("没有窗口")
-        }
+//    @objc func openApp() {
+//        if let window = WindowManager.shared.mainWindow {
+//            window.makeKeyAndOrderFront(nil)
+//        } else {
+//            print("没有窗口")
+//        }
+//    }
+    
+    // 截图方法
+    @objc func screenshot() {
+        
     }
     
     func removeFromStatusBar() {

@@ -19,6 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // 设置为辅助App，无 Dock 图标、无菜单栏（菜单栏可自建）。
         NSApp.setActivationPolicy(.accessory)
+        
         let contentVC = NSHostingController(rootView: ContentView())
         let workspaceVC = NSHostingController(rootView: ContentView())
         
@@ -58,9 +59,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return true
     }
     
+    // 应用即将推出
     func applicationWillTerminate(_ notification: Notification) {
-        print("应用即将退出，清除状态栏图标")
-        StatusBarController.shared.removeFromStatusBar()
-        // statusBarController = nil
     }
 }
