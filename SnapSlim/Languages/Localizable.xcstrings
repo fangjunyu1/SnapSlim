@@ -1,19 +1,20 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Hello, world!" : {
-
-    },
-    "Open" : {
-      "comment" : "退出应用程序的菜单项标题",
+    "Full Screen Screenshot" : {
+      "comment" : "全屏截图",
+      "extractionState" : "manual",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开"
+            "value" : "全屏截图"
           }
         }
       }
+    },
+    "Hello, world!" : {
+
     },
     "Quit" : {
       "comment" : "退出应用程序的菜单项标题",
@@ -27,7 +28,16 @@
       }
     },
     "ScreenShot" : {
-      "extractionState" : "manual"
+      "comment" : "截屏",
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "截屏"
+          }
+        }
+      }
     },
     "SnapSlim" : {
       "comment" : "应用名称",
