@@ -77,46 +77,76 @@ class StatusBarController:ObservableObject {
     // 全屏截图（延时）
     @objc func fullScreenshoot() {
         print("进入全屏截图")
-        if let cgImage = CGDisplayCreateImage(CGMainDisplayID()) {
-            print("获取到当前屏幕")
-            let bitmapRep = NSBitmapImageRep(cgImage: cgImage)
-            
-            // 将数据编码为 PNG 格式的Data
-            let imageData = bitmapRep.representation(using: .png, properties: [:])
-            
-            // 文件名称：截屏+当前时间
-            let fullScreenTitle = NSLocalizedString("ScreenShot", comment: "截屏")
-            let now = Date()
-            let calendar = Calendar.current
-            let year = calendar.component(.year, from: now)   // 当前年份
-            let month = calendar.component(.month, from: now) // 当前月份
-            let day = calendar.component(.day, from: now)     // 当前日期
-            let hour = calendar.component(.hour, from: now)   // 当前小时
-            let minute = calendar.component(.minute, from: now) // 当前分钟
-            let second = calendar.component(.second, from: now) // 当前秒
-            // 文件名称
-            let fileName = "\(fullScreenTitle)\(year)-\(month)-\(day) \(hour).\(minute).\(second)"
-            
-            print("文件名称为:\(fileName)")
-            
-            let savePanel = NSSavePanel()
-            savePanel.allowedContentTypes = [.png]  // 保存图片的格式
-            savePanel.nameFieldStringValue = fileName   // 保存的文件名称
-            savePanel.canCreateDirectories = true   // 允许新建文件夹
-            savePanel.directoryURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first!   // 默认保存路径为桌面
-            print("开始调用NSSavePanel")
-            
-            savePanel.begin { response in
-                print("NSSavePanel返回\(response)")
-                if response == .OK {
-                    if let url = savePanel.url {
-                        // 在这里保存文件内容到 url 路径
-                        print("返回成功，保存图片文件")
-                        try? imageData?.write(to: url)
-                    }
-                } else {
-                    print("返回失败")
+        // 1. 获取主屏幕 ID 和截图
+        let mainDisplayID = CGMainDisplayID()
+        guard let cgImage = CGDisplayCreateImage(mainDisplayID) else { return }
+        
+        // 2. 获取屏幕尺寸
+        guard let screen = NSScreen.main else { return }
+        let screenSize = screen.frame.size
+        
+        // 3. 创建 NSImage
+        let screenImage = NSImage(cgImage: cgImage, size: screenSize)
+        
+        // 4. 获取鼠标图像和 hotspot（点击热点）
+        let cursorImage = NSCursor.current.image
+        let hotSpot = NSCursor.current.hotSpot
+        
+        // 5. 获取鼠标位置（全局坐标，原点在左下）
+        var mouseLocation = NSEvent.mouseLocation
+        
+        // 6. 合成图像：绘制屏幕 + 鼠标图像
+        let finalImage = NSImage(size: screenSize)
+        finalImage.lockFocus()
+        
+        // 绘制屏幕截图
+        screenImage.draw(at: .zero, from: .zero, operation: .sourceOver, fraction: 1.0)
+        
+        // 绘制鼠标图像（考虑 hotspot 偏移）
+        let cursorOrigin = NSPoint(x: mouseLocation.x - hotSpot.x,
+                                   y: mouseLocation.y - hotSpot.y)
+        cursorImage.draw(at: cursorOrigin, from: .zero, operation: .sourceOver, fraction: 1.0)
+        
+        finalImage.unlockFocus()
+        
+        guard let tiffData = finalImage.tiffRepresentation,
+              let bitmapRep = NSBitmapImageRep(data: tiffData) else {return }
+        
+        // 将数据编码为 PNG 格式的Data
+        let imageData = bitmapRep.representation(using: .png, properties: [:])
+        
+        // 文件名称：截屏+当前时间
+        let fullScreenTitle = NSLocalizedString("ScreenShot", comment: "截屏")
+        let now = Date()
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: now)   // 当前年份
+        let month = calendar.component(.month, from: now) // 当前月份
+        let day = calendar.component(.day, from: now)     // 当前日期
+        let hour = calendar.component(.hour, from: now)   // 当前小时
+        let minute = calendar.component(.minute, from: now) // 当前分钟
+        let second = calendar.component(.second, from: now) // 当前秒
+        // 文件名称
+        let fileName = "\(fullScreenTitle)\(year)-\(month)-\(day) \(hour).\(minute).\(second)"
+        
+        print("文件名称为:\(fileName)")
+        
+        let savePanel = NSSavePanel()
+        savePanel.allowedContentTypes = [.png]  // 保存图片的格式
+        savePanel.nameFieldStringValue = fileName   // 保存的文件名称
+        savePanel.canCreateDirectories = true   // 允许新建文件夹
+        savePanel.directoryURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first!   // 默认保存路径为桌面
+        print("开始调用NSSavePanel")
+        
+        savePanel.begin { response in
+            print("NSSavePanel返回\(response)")
+            if response == .OK {
+                if let url = savePanel.url {
+                    // 在这里保存文件内容到 url 路径
+                    print("返回成功，保存图片文件")
+                    try? imageData?.write(to: url)
                 }
+            } else {
+                print("返回失败")
             }
         }
     }
