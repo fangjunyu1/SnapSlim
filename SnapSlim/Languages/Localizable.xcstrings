@@ -39,6 +39,18 @@
         }
       }
     },
+    "Select the save folder" : {
+      "comment" : "选择保存文件夹",
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择保存文件夹"
+          }
+        }
+      }
+    },
     "SnapSlim" : {
       "comment" : "应用名称",
       "extractionState" : "manual",

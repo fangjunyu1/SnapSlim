@@ -74,9 +74,25 @@ class StatusBarController:ObservableObject {
         print("调用了screenshot截屏方法")
     }
     
+    func getFileURL(folderURL: URL) -> URL {
+        // 文件名称：截屏+当前时间
+        let fullScreenTitle = NSLocalizedString("ScreenShot", comment: "截屏")
+        let now = Date()
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: now)   // 当前年份
+        let month = calendar.component(.month, from: now) // 当前月份
+        let day = calendar.component(.day, from: now)     // 当前日期
+        let hour = calendar.component(.hour, from: now)   // 当前小时
+        let minute = calendar.component(.minute, from: now) // 当前分钟
+        let second = calendar.component(.second, from: now) // 当前秒
+        // 文件名称
+        let fileName = "\(fullScreenTitle)\(year)-\(month)-\(day) \(hour).\(minute).\(second)"
+        
+        let fileURL = folderURL.appendingPathComponent(fileName).appendingPathExtension("png")
+        return fileURL
+    }
     // 全屏截图（延时）
     @objc func fullScreenshoot() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
         print("进入全屏截图")
         // 1. 获取主屏幕 ID 和截图
         let mainDisplayID = CGMainDisplayID()
@@ -105,8 +121,8 @@ class StatusBarController:ObservableObject {
         screenImage.draw(at: .zero, from: .zero, operation: .sourceOver, fraction: 1.0)
         
         // 绘制鼠标图像（考虑 hotspot 偏移）
-            let cursorOrigin = NSPoint(x: mouseLocation.x - hotSpot.x,
-                                       y: mouseLocation.y - cursorImageSize.height  + hotSpot.x)
+        let cursorOrigin = NSPoint(x: mouseLocation.x - hotSpot.x,
+                                   y: mouseLocation.y - cursorImageSize.height  + hotSpot.x)
         cursorImage.draw(at: cursorOrigin, from: .zero, operation: .sourceOver, fraction: 1.0)
         
         finalImage.unlockFocus()
@@ -115,42 +131,52 @@ class StatusBarController:ObservableObject {
               let bitmapRep = NSBitmapImageRep(data: tiffData) else {return }
         
         // 将数据编码为 PNG 格式的Data
-        let imageData = bitmapRep.representation(using: .png, properties: [:])
+        guard let imageData = bitmapRep.representation(using: .png, properties: [:]) else { return }
         
-        // 文件名称：截屏+当前时间
-        let fullScreenTitle = NSLocalizedString("ScreenShot", comment: "截屏")
-        let now = Date()
-        let calendar = Calendar.current
-        let year = calendar.component(.year, from: now)   // 当前年份
-        let month = calendar.component(.month, from: now) // 当前月份
-        let day = calendar.component(.day, from: now)     // 当前日期
-        let hour = calendar.component(.hour, from: now)   // 当前小时
-        let minute = calendar.component(.minute, from: now) // 当前分钟
-        let second = calendar.component(.second, from: now) // 当前秒
-        // 文件名称
-        let fileName = "\(fullScreenTitle)\(year)-\(month)-\(day) \(hour).\(minute).\(second)"
-        
-        print("文件名称为:\(fileName)")
-        
-        let savePanel = NSSavePanel()
-        savePanel.allowedContentTypes = [.png]  // 保存图片的格式
-        savePanel.nameFieldStringValue = fileName   // 保存的文件名称
-        savePanel.canCreateDirectories = true   // 允许新建文件夹
-        savePanel.directoryURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first!   // 默认保存路径为桌面
-        print("开始调用NSSavePanel")
-        
-        savePanel.begin { response in
-            print("NSSavePanel返回\(response)")
-            if response == .OK {
-                if let url = savePanel.url {
-                    // 在这里保存文件内容到 url 路径
-                    print("返回成功，保存图片文件")
-                    try? imageData?.write(to: url)
+        if let bookmark = UserDefaults.standard.data(forKey: "SaveFolderBookmark") {
+            var isStale = false
+            do {
+                let url = try URL(resolvingBookmarkData: bookmark, options: [.withSecurityScope], relativeTo: nil, bookmarkDataIsStale: &isStale)
+                
+                if url.startAccessingSecurityScopedResource() {
+                    defer { url.stopAccessingSecurityScopedResource() }
+                    
+                    let fileURL = getFileURL(folderURL: url)
+
+                    try? imageData.write(to: fileURL)
+                } else {
+                    print("无法访问资源")
                 }
-            } else {
-                print("返回失败")
+            } catch {
+                print("解析书签失败: \(error)")
             }
-        }
+        } else {
+            let panel = NSOpenPanel()
+            panel.canChooseDirectories = true
+            panel.canChooseFiles = false
+            panel.allowsMultipleSelection = false
+            let saveDir = NSLocalizedString("Select the save folder", comment: "选择保存文件夹")
+            panel.prompt = saveDir
+            
+            panel.begin { [self] response in
+                if response == .OK, let folderURL = panel.url {
+                    // 创建安全书签
+                    do {
+                        let bookmark = try folderURL.bookmarkData(options: [.withSecurityScope], includingResourceValuesForKeys: nil, relativeTo: nil)
+                        UserDefaults.standard.set(bookmark, forKey: "SaveFolderBookmark")
+                        print("保存文件夹书签成功:\(folderURL)")
+                    } catch {
+                        print("书签创建失败: \(error)")
+                    }
+                    
+                    let fileURL = getFileURL(folderURL: folderURL)
+                    do {
+                        try imageData.write(to: fileURL)
+                    } catch {
+                        print("保存失败")
+                    }
+                }
+            }
         }
     }
     
