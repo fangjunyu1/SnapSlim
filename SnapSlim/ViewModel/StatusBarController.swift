@@ -76,6 +76,7 @@ class StatusBarController:ObservableObject {
     
     // 全屏截图（延时）
     @objc func fullScreenshoot() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
         print("进入全屏截图")
         // 1. 获取主屏幕 ID 和截图
         let mainDisplayID = CGMainDisplayID()
@@ -90,10 +91,11 @@ class StatusBarController:ObservableObject {
         
         // 4. 获取鼠标图像和 hotspot（点击热点）
         let cursorImage = NSCursor.current.image
+        let cursorImageSize = NSCursor.current.image.size
         let hotSpot = NSCursor.current.hotSpot
         
         // 5. 获取鼠标位置（全局坐标，原点在左下）
-        var mouseLocation = NSEvent.mouseLocation
+        let mouseLocation = NSEvent.mouseLocation
         
         // 6. 合成图像：绘制屏幕 + 鼠标图像
         let finalImage = NSImage(size: screenSize)
@@ -103,8 +105,8 @@ class StatusBarController:ObservableObject {
         screenImage.draw(at: .zero, from: .zero, operation: .sourceOver, fraction: 1.0)
         
         // 绘制鼠标图像（考虑 hotspot 偏移）
-        let cursorOrigin = NSPoint(x: mouseLocation.x - hotSpot.x,
-                                   y: mouseLocation.y - hotSpot.y)
+            let cursorOrigin = NSPoint(x: mouseLocation.x - hotSpot.x,
+                                       y: mouseLocation.y - cursorImageSize.height  + hotSpot.x)
         cursorImage.draw(at: cursorOrigin, from: .zero, operation: .sourceOver, fraction: 1.0)
         
         finalImage.unlockFocus()
@@ -148,6 +150,7 @@ class StatusBarController:ObservableObject {
             } else {
                 print("返回失败")
             }
+        }
         }
     }
     
