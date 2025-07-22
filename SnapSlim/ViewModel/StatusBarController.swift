@@ -155,6 +155,7 @@ class StatusBarController:ObservableObject {
             panel.canChooseDirectories = true
             panel.canChooseFiles = false
             panel.allowsMultipleSelection = false
+            panel.directoryURL = FileManager.default.urls(for: .desktopDirectory, in: .userDomainMask).first!
             let saveDir = NSLocalizedString("Select the save folder", comment: "选择保存文件夹")
             panel.prompt = saveDir
             
