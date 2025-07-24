@@ -8,10 +8,32 @@
 import AppKit
 import SwiftUI
 import UniformTypeIdentifiers
+import ScreenCaptureKit
+
+class MyStreamDelegate: NSObject, SCStreamDelegate {
+    func stream(_ stream: SCStream, didStopWithError error: Error) {
+        print("捕获流停止，原因：\(error.localizedDescription)")
+    }
+}
+
+class MyStreamOutput: NSObject, SCStreamOutput {
+    func stream(_ stream: SCStream, didOutputSampleBuffer sampleBuffer: CMSampleBuffer, of type: SCStreamOutputType) {
+        if type == .screen {
+            if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
+                // 获取的是 CVPixelBuffer，可以用于渲染、保存图像等
+                print("获取到屏幕帧数据：\(imageBuffer)")
+            }
+        }
+    }
+}
 
 class StatusBarController:ObservableObject {
     static let shared = StatusBarController()
     private var statusItem: NSStatusItem?
+    
+    var stream: SCStream?
+    var streamDelegate: MyStreamDelegate = MyStreamDelegate()
+    let streamOutput: MyStreamOutput = MyStreamOutput()
     
     init() {
         print("进入 StatusBarController 方法")
@@ -58,40 +80,15 @@ class StatusBarController:ObservableObject {
         } else {
             print("没有 statusItem 状态栏")
         }
-        
     }
-    
-    //        @objc func openApp() {
-    //            if let window = WindowManager.shared.mainWindow {
-    //                window.makeKeyAndOrderFront(nil)
-    //            } else {
-    //                print("没有窗口")
-    //            }
-    //        }
     
     // 截图方法
+    @MainActor
     @objc func screenshot() {
         print("调用了screenshot截屏方法")
-    }
-    
-    func getFileURL(folderURL: URL) -> URL {
-        // 文件名称：截屏+当前时间
-        let fullScreenTitle = NSLocalizedString("ScreenShot", comment: "截屏")
-        let now = Date()
-        let calendar = Calendar.current
-        let year = calendar.component(.year, from: now)   // 当前年份
-        let month = calendar.component(.month, from: now) // 当前月份
-        let day = calendar.component(.day, from: now)     // 当前日期
-        let hour = calendar.component(.hour, from: now)   // 当前小时
-        let minute = calendar.component(.minute, from: now) // 当前分钟
-        let second = calendar.component(.second, from: now) // 当前秒
-        // 文件名称
-        let fileName = "\(fullScreenTitle)\(year)-\(month)-\(day) \(hour).\(minute).\(second)"
         
-        let fileURL = folderURL.appendingPathComponent(fileName).appendingPathExtension("png")
-        return fileURL
     }
-    // 全屏截图（延时）
+    // 全屏截图
     @objc func fullScreenshoot() {
         print("进入全屏截图")
         // 1. 获取主屏幕 ID 和截图
@@ -130,8 +127,20 @@ class StatusBarController:ObservableObject {
         guard let tiffData = finalImage.tiffRepresentation,
               let bitmapRep = NSBitmapImageRep(data: tiffData) else {return }
         
+        // 将 NSBitmapImageRep 数据传入保存图片
+        saveImage(nsBitImage:bitmapRep)
+    }
+    
+    func removeFromStatusBar() {
+        if let item = statusItem {
+            NSStatusBar.system.removeStatusItem(item)
+            statusItem = nil
+        }
+    }
+    
+    func saveImage(nsBitImage: NSBitmapImageRep) {
         // 将数据编码为 PNG 格式的Data
-        guard let imageData = bitmapRep.representation(using: .png, properties: [:]) else { return }
+        guard let imageData = nsBitImage.representation(using: .png, properties: [:]) else { return }
         
         if let bookmark = UserDefaults.standard.data(forKey: "SaveFolderBookmark") {
             var isStale = false
@@ -142,7 +151,7 @@ class StatusBarController:ObservableObject {
                     defer { url.stopAccessingSecurityScopedResource() }
                     
                     let fileURL = getFileURL(folderURL: url)
-
+                    
                     try? imageData.write(to: fileURL)
                 } else {
                     print("无法访问资源")
@@ -180,11 +189,22 @@ class StatusBarController:ObservableObject {
             }
         }
     }
-    
-    func removeFromStatusBar() {
-        if let item = statusItem {
-            NSStatusBar.system.removeStatusItem(item)
-            statusItem = nil
-        }
+    // 根据文件夹URL返回文件URL
+    func getFileURL(folderURL: URL) -> URL {
+        // 文件名称：截屏+当前时间
+        let fullScreenTitle = NSLocalizedString("ScreenShot", comment: "截屏")
+        let now = Date()
+        let calendar = Calendar.current
+        let year = calendar.component(.year, from: now)   // 当前年份
+        let month = calendar.component(.month, from: now) // 当前月份
+        let day = calendar.component(.day, from: now)     // 当前日期
+        let hour = calendar.component(.hour, from: now)   // 当前小时
+        let minute = calendar.component(.minute, from: now) // 当前分钟
+        let second = calendar.component(.second, from: now) // 当前秒
+        // 文件名称
+        let fileName = "\(fullScreenTitle)\(year)-\(month)-\(day) \(hour).\(minute).\(second)"
+        
+        let fileURL = folderURL.appendingPathComponent(fileName).appendingPathExtension("png")
+        return fileURL
     }
 }
