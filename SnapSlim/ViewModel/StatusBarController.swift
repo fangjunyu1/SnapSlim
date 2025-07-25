@@ -7,33 +7,10 @@
 
 import AppKit
 import SwiftUI
-import UniformTypeIdentifiers
-import ScreenCaptureKit
-
-class MyStreamDelegate: NSObject, SCStreamDelegate {
-    func stream(_ stream: SCStream, didStopWithError error: Error) {
-        print("捕获流停止，原因：\(error.localizedDescription)")
-    }
-}
-
-class MyStreamOutput: NSObject, SCStreamOutput {
-    func stream(_ stream: SCStream, didOutputSampleBuffer sampleBuffer: CMSampleBuffer, of type: SCStreamOutputType) {
-        if type == .screen {
-            if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
-                // 获取的是 CVPixelBuffer，可以用于渲染、保存图像等
-                print("获取到屏幕帧数据：\(imageBuffer)")
-            }
-        }
-    }
-}
 
 class StatusBarController:ObservableObject {
     static let shared = StatusBarController()
     private var statusItem: NSStatusItem?
-    
-    var stream: SCStream?
-    var streamDelegate: MyStreamDelegate = MyStreamDelegate()
-    let streamOutput: MyStreamOutput = MyStreamOutput()
     
     init() {
         print("进入 StatusBarController 方法")
@@ -83,7 +60,7 @@ class StatusBarController:ObservableObject {
     }
     
     // 截图方法
-    @MainActor
+    // @MainActor
     @objc func screenshot() {
         print("调用了screenshot截屏方法")
         
