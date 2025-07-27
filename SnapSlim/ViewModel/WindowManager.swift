@@ -8,9 +8,11 @@
 import AppKit
 import SwiftUI
 
-class WindowManager {
+class WindowManager:NSWindowController,NSWindowDelegate {
     static let shared = WindowManager()
+    
     var mainWindow: NSWindow? = nil
+    var TipsAccessibilityWindow: NSWindow? = nil
     
     // 创建窗口
     func createWindow() {
@@ -45,6 +47,36 @@ class WindowManager {
             
             WindowManager.shared.mainWindow = window
             print("window完成初始化")
+        }
+    }
+    
+    // 创建引导“辅助功能”窗口
+    func createTipsAccessibilityWindow() {
+        if TipsAccessibilityWindow == nil {
+            let window = NSWindow(
+                contentRect: NSRect(x: 0, y: 0, width: 400, height: 200),
+                styleMask: [.closable],
+                backing: .buffered,
+                defer: false
+            )
+            window.center()
+            window.level = .floating
+            window.isMovable = true
+            window.delegate = self
+            
+            let hostingController = NSHostingController(rootView: TipsAccessibilityView())
+            window.contentViewController = hostingController
+            
+            window.makeKeyAndOrderFront(nil)
+            
+            self.TipsAccessibilityWindow = window
+            print("window完成初始化")
+        }
+    }
+    
+    func windowWillClose(_ notification: Notification) {
+        if let window = notification.object as? NSWindow,window == TipsAccessibilityWindow {
+            print("当前 TipsAccessibilityWindow 窗口被关闭，清理辅助窗口")
         }
     }
 }

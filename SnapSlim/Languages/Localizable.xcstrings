@@ -1,6 +1,30 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Cancel" : {
+      "comment" : "取消",
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取消"
+          }
+        }
+      }
+    },
+    "Enable Accessibility tips" : {
+      "comment" : "启用“辅助功能”提示",
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "启用“辅助功能”提示"
+          }
+        }
+      }
+    },
     "Full Screen Screenshot" : {
       "comment" : "全屏截图",
       "extractionState" : "manual",
@@ -15,6 +39,42 @@
     },
     "Hello, world!" : {
 
+    },
+    "Implement shortcut key function" : {
+      "comment" : "实现快捷键功能",
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "实现快捷键功能"
+          }
+        }
+      }
+    },
+    "Open Settings" : {
+      "comment" : "打开设置",
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开设置"
+          }
+        }
+      }
+    },
+    "Please enable the \"Accessibility\" permission for this app in the system settings to implement shortcut functions such as screenshots and screen recording." : {
+      "comment" : "请在系统设置中为此应用开启『辅助功能』权限，以实现截图、录屏等快捷键功能。",
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请在系统设置中为此应用开启『辅助功能』权限，以实现截图、录屏等快捷键功能。"
+          }
+        }
+      }
     },
     "Quit" : {
       "comment" : "退出应用程序的菜单项标题",
