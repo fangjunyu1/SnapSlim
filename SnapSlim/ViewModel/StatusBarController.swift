@@ -65,11 +65,14 @@ class StatusBarController:ObservableObject {
     // @MainActor
     @objc func screenshot() {
         print("调用了screenshot截屏方法")
-        
     }
     // 全屏截图
     @objc func fullScreenshoot() {
         print("进入全屏截图")
+        
+        // 0、播放截图声音
+        SoundManager.shared.playSound(named: "shutter")
+        
         // 1. 获取主屏幕 ID 和截图
         let mainDisplayID = CGMainDisplayID()
         guard let cgImage = CGDisplayCreateImage(mainDisplayID) else { return }
