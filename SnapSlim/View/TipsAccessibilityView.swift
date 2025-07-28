@@ -51,6 +51,8 @@ struct TipsAccessibilityView: View {
             Text("Please enable the \"Accessibility\" permission for this app in the system settings to implement shortcut functions such as screenshots and screen recording.")
                 .multilineTextAlignment(.center)
                 .foregroundColor(.gray)
+                .frame(width:260)
+                .fixedSize()
             Spacer().frame(height:20)
             Button(action: {
                 if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
@@ -68,6 +70,9 @@ struct TipsAccessibilityView: View {
                     .cornerRadius(10)
             })
             .buttonStyle(.plain)
+            .onHover { isHovering in
+                               isHovering ? NSCursor.pointingHand.set() : NSCursor.arrow.set()
+                           }
             Spacer().frame(height:10)
             Button(action: {
                 // 隐藏窗口
@@ -82,12 +87,14 @@ struct TipsAccessibilityView: View {
                     .cornerRadius(10)
             })
             .buttonStyle(.plain)
+            .onHover { isHovering in
+                               isHovering ? NSCursor.pointingHand.set() : NSCursor.arrow.set()
+                           }
             
             Spacer().frame(height: 20)
         }
         .frame(width: 280)
         .padding(20)
-        .cornerRadius(20)
     }
 }
 

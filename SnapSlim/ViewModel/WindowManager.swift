@@ -53,18 +53,25 @@ class WindowManager:NSWindowController,NSWindowDelegate {
     // 创建引导“辅助功能”窗口
     func createTipsAccessibilityWindow() {
         if TipsAccessibilityWindow == nil {
+            let hostingController = NSHostingController(rootView: TipsAccessibilityView())
+            
+            // 用 hostingController 来获取内容 size
+            let contentSize = hostingController.view.intrinsicContentSize
+            print("contentSize:\(contentSize)")
             let window = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: 400, height: 200),
-                styleMask: [.closable],
+                contentRect: NSRect(origin: .zero, size: hostingController.view.fittingSize),
+                styleMask: [.titled, .borderless],
                 backing: .buffered,
                 defer: false
             )
             window.center()
             window.level = .floating
             window.isMovable = true
+            window.isMovableByWindowBackground = true
+            window.titlebarAppearsTransparent = true
             window.delegate = self
+            window.isReleasedWhenClosed = true
             
-            let hostingController = NSHostingController(rootView: TipsAccessibilityView())
             window.contentViewController = hostingController
             
             window.makeKeyAndOrderFront(nil)

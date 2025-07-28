@@ -115,10 +115,12 @@ class StatusBarController:ObservableObject {
         }
     }
     
+    // 保存图片
     func saveImage(nsBitImage: NSBitmapImageRep) {
         // 将数据编码为 PNG 格式的Data
         guard let imageData = nsBitImage.representation(using: .png, properties: [:]) else { return }
         
+        // 如果有安全书签，保存到安全书签中
         if let bookmark = UserDefaults.standard.data(forKey: "SaveFolderBookmark") {
             var isStale = false
             do {
@@ -137,6 +139,7 @@ class StatusBarController:ObservableObject {
                 print("解析书签失败: \(error)")
             }
         } else {
+            // 如果没有安全书签，调用NSOpenPanel让用户选择保存文件的路径
             let panel = NSOpenPanel()
             panel.canChooseDirectories = true
             panel.canChooseFiles = false
