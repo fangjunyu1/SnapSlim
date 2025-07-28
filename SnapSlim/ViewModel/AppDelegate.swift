@@ -56,23 +56,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     // 监听NSEvent并进行回调
     func handleGlobalKeyEvent(_ event: NSEvent) {
-        let commandPressed = event.modifierFlags.contains(.command)
-        let shiftPressed = event.modifierFlags.contains(.shift)
+        let optionPressed = event.modifierFlags.contains(.option)
         
-        if commandPressed && shiftPressed {
+        if optionPressed {
             switch event.keyCode {
-            case 0:     // Command + Shift + A
-                print("Command + Shift + A 被触发！普通截图")
+            case 18:     // Option + 1
+                print("Option + 1 被触发！普通截图")
                 StatusBarController.shared.screenshot()
-            case 1:
-                print("Command + Shift + S 被触发！全屏截图")
+            case 19:    // Option + 2
+                print("Option + 2 被触发！全屏截图")
                 StatusBarController.shared.fullScreenshoot()
             default:
                 print("event:\(event.keyCode)")
             }
-        }
-        if commandPressed && shiftPressed && event.keyCode == 0 {
-            print("1、event:\(event.keyCode)")
         }
     }
     

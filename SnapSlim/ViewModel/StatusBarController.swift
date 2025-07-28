@@ -28,13 +28,15 @@ class StatusBarController:ObservableObject {
             
             // 截图
             let screenShotTitle = NSLocalizedString("ScreenShot", comment: "截图")
-            let screenShotItem = NSMenuItem(title: screenShotTitle, action: #selector(screenshot), keyEquivalent: "o")
+            let screenShotItem = NSMenuItem(title: screenShotTitle, action: #selector(screenshot), keyEquivalent: "1")
+            screenShotItem.keyEquivalentModifierMask = [.option]
             screenShotItem.target = self
             menu.addItem(screenShotItem)
             
             // 全屏截图
             let fullScreenTitle = NSLocalizedString("Full Screen Screenshot", comment: "全屏截图（延时）")
-            let fullScreenItem = NSMenuItem(title: fullScreenTitle, action: #selector(fullScreenshoot), keyEquivalent: "r")
+            let fullScreenItem = NSMenuItem(title: fullScreenTitle, action: #selector(fullScreenshoot), keyEquivalent: "2")
+            fullScreenItem.keyEquivalentModifierMask = [.option]
             fullScreenItem.target = self
             menu.addItem(fullScreenItem)
             
