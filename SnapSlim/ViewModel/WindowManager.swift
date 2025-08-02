@@ -12,6 +12,7 @@ class WindowManager:NSWindowController,NSWindowDelegate {
     static let shared = WindowManager()
     
     var mainWindow: NSWindow? = nil
+    var screenShotOverlayWindow: NSWindow? = nil
     var TipsAccessibilityWindow: NSWindow? = nil
     
     // 创建窗口
