@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@" : {
+
+    },
     "Cancel" : {
       "comment" : "取消",
       "extractionState" : "manual",
