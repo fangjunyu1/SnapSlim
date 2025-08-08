@@ -10,6 +10,7 @@ import SwiftUI
 
 class StatusBarController:ObservableObject {
     static let shared = StatusBarController()
+    private var screenshotWC: ScreenshotWindowController?
     private var statusItem: NSStatusItem?
     
     init() {
@@ -65,6 +66,12 @@ class StatusBarController:ObservableObject {
     // @MainActor
     @objc func screenshot() {
         print("调用了screenshot截屏方法")
+        if let screenshotWC = screenshotWC{
+            screenshotWC.showScreenshotOverlay()  // 显示窗口
+        } else {
+            screenshotWC = ScreenshotWindowController()
+            screenshotWC?.showScreenshotOverlay()
+        }
     }
     // 全屏截图
     @objc func fullScreenshoot() {

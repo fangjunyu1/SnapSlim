@@ -42,6 +42,5 @@ class AppStorage:ObservableObject {
             inAppPurchaseMembership = UserDefaults.standard.bool(forKey: "inAppPurchaseMembership")
             print("应用赞助，默认值为 \(inAppPurchaseMembership)")
         }
-        
     }
 }

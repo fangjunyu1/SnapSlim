@@ -4,6 +4,9 @@
     "%@" : {
 
     },
+    "×" : {
+
+    },
     "Cancel" : {
       "comment" : "取消",
       "extractionState" : "manual",
@@ -39,9 +42,6 @@
           }
         }
       }
-    },
-    "Hello, world!" : {
-
     },
     "Implement shortcut key function" : {
       "comment" : "实现快捷键功能",

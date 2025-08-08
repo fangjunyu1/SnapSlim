@@ -27,12 +27,14 @@ class ScreenshotOverlayView: NSView {
         fatalError("init(coder:) has not been implemented")
     }
     override func mouseDown(with event: NSEvent) {
+        super.mouseDown(with: event)
         print("按下鼠标")
         startPoint = event.locationInWindow
         hideToolbar()   // 隐藏工具栏
         hideResolution()    // 隐藏分辨率
     }
     override func mouseDragged(with event: NSEvent) {
+        super.mouseDragged(with: event)
         print("移动鼠标")
         currentPoint = event.locationInWindow
         updateSelectionPath()
@@ -40,6 +42,7 @@ class ScreenshotOverlayView: NSView {
         hideResolution()    // 隐藏分辨率
     }
     override func mouseUp(with event: NSEvent) {
+        super.mouseUp(with: event)
         print("抬起鼠标")
         currentPoint = event.locationInWindow
         showToolbar() // 显示常用工具栏
@@ -101,14 +104,14 @@ class ScreenshotOverlayView: NSView {
         }
         let xLeftSpacing = rect.minX
         let xRightSpacing = bounds.width - rect.maxX
-        if xLeftSpacing < toolbarSize.width / 2 {
+        if xLeftSpacing < toolbarSize.width / 2 - rect.width / 2 {
             toolbarOrigin.x = windowOrigin.x - xLeftSpacing
         }
         if xRightSpacing < 300 - rect.width / 2 {
             toolbarOrigin.x = windowOrigin.x + rect.width +  xRightSpacing - toolbarSize.width
         }
         
-//        print("xLeftSpacing:\(xLeftSpacing),xRightSpacing:\(xRightSpacing),toolbarSize:\(toolbarSize),toolbarOrigin:\(toolbarOrigin),windowOrigin:\(windowOrigin)")
+        print("xLeftSpacing:\(xLeftSpacing),xRightSpacing:\(xRightSpacing),toolbarSize:\(toolbarSize),toolbarOrigin:\(toolbarOrigin),windowOrigin:\(windowOrigin)")
         
         // 如果已经显示则不再重复创建
         guard toolbarWindow == nil else {
