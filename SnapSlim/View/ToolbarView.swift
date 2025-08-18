@@ -13,10 +13,16 @@ struct ToolbarView: View {
     @State private var stepHoverIndex:Int?
     @State private var storageHoverIndex:Int?
     // 工具名称
-    var commandTools = ["square","circle","line.diagonal","line.diagonal.arrow","pencil.tip","eraser","character","mosaic","1.circle","pin","translate","text.viewfinder"]
+    var commandTools = ["square","circle","line.diagonal","line.diagonal.arrow","pencil.tip","eraser","character","mosaic","1.circle","pin","translate","text.viewfinder","quotelevel"]
     var storageTools = ["xmark","square.and.arrow.down","checkmark"]
     var stepTools = ["arrowshape.turn.up.left","arrowshape.turn.up.right"]
     
+    // 工具命令
+    func stepToolAction(num: Int) {
+        if num == 0 {
+            StatusBarController.shared.screenshotWC?.closeScreenshot()
+        }
+    }
     var body: some View {
         HStack {
             // 常用工具栏
@@ -36,7 +42,7 @@ struct ToolbarView: View {
                     }
                 }
             }
-            .frame(width: 430,height:40)
+            .frame(width: 470,height:40)
             .background(.black.opacity(0.5))
             .cornerRadius(8)
             
@@ -69,6 +75,7 @@ struct ToolbarView: View {
                 ForEach(Array(storageTools.enumerated()),id: \.offset) { index,tool in
                     Button(action: {
                         // 执行命令代码
+                        stepToolAction(num:index)
                     }, label: {
                         Image(systemName: "\(tool)")
                             .font(.title2)

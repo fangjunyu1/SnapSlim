@@ -8,7 +8,7 @@
 import AppKit
 import SwiftUI
 
-class ScreenshotOverlayView: NSView {
+class ScreenshotView: NSView {
     var startPoint: NSPoint?
     var currentPoint: NSPoint?
     var selectionLayer = CAShapeLayer()
@@ -20,6 +20,11 @@ class ScreenshotOverlayView: NSView {
         wantsLayer = true
         layer?.backgroundColor = NSColor.black.withAlphaComponent(0.2).cgColor
         layer?.mask = selectionLayer
+        
+        // 设置蒙版默认路径
+        let path = CGMutablePath()
+        path.addRect(frameRect)
+        selectionLayer.path = path
         selectionLayer.fillRule = .evenOdd
     }
     
@@ -49,10 +54,10 @@ class ScreenshotOverlayView: NSView {
         showResolution()    // 显示分辨率
     }
     
-    override func layout() {
-        let path = CGMutablePath()
-        path.addRect(bounds)
-        selectionLayer.path = path
+    override func keyDown(with event: NSEvent) {
+        print("NSView的时间戳：\(event.timestamp)")
+        print("event.keyCode:\(event.keyCode)")
+        super.keyDown(with: event)
     }
     
     // 根据用户拖动鼠标的区域计算区域矩形
@@ -84,7 +89,7 @@ class ScreenshotOverlayView: NSView {
     func showToolbar() {
         guard let rect = selectedRect(),let window = window else { return }
         // 设置工具栏尺寸
-        let toolbarSize = NSSize(width: 650, height: 40)
+        let toolbarSize = NSSize(width: 690, height: 40)
         // 将视图尺寸转换为窗口尺寸
         let windowOrigin = window.convertToScreen(rect).origin
         // 默认放在区域的底部
@@ -189,10 +194,10 @@ class ScreenshotOverlayView: NSView {
 }
 
 struct NSScreenshotOverlayView: NSViewRepresentable {
-    func makeNSView(context: Context) -> ScreenshotOverlayView {
-        return ScreenshotOverlayView()
+    func makeNSView(context: Context) -> ScreenshotView {
+        return ScreenshotView()
     }
-    func updateNSView(_ nsView: ScreenshotOverlayView, context: Context) {
+    func updateNSView(_ nsView: ScreenshotView, context: Context) {
     }
 }
 

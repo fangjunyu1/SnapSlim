@@ -18,12 +18,18 @@ class ScreenshotWindowController: NSWindowController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func showScreenshotOverlay() {
+    func showScreenshot() {
         self.showWindow(nil)
         self.window?.makeKeyAndOrderFront(nil)
     }
 
-    func closeScreenshotOverlay() {
+    func closeScreenshot() {
         self.close()
+    }
+    
+    override func keyDown(with event: NSEvent) {
+        print("WindowController的时间戳：\(event.timestamp)")
+        print("event.keyCode:\(event.keyCode)")
+        super.keyDown(with: event)
     }
 }
