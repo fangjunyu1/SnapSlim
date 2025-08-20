@@ -16,16 +16,17 @@ class ScreenshotWindow: NSWindow {
             contentRect: NSScreen.main?.frame ?? .zero,
             styleMask: [.borderless],
             backing: .buffered,
-            defer: false)
+            defer: false
+        )
         self.isOpaque = false
         self.backgroundColor = .clear
         self.level = .screenSaver // 保证在最上层
         self.hasShadow = false
         self.ignoresMouseEvents = false
-        // self.makeFirstResponder(nil)    // 设置为第一响应者
+        self.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
         self.contentView = hostingView
     }
-    
+
     override var canBecomeKey: Bool {
         return true
     }

@@ -66,9 +66,11 @@ class StatusBarController:ObservableObject {
     // @MainActor
     @objc func screenshot() {
         print("调用了screenshot截屏方法")
-        if let screenshotWC = screenshotWC{
+        if let screenshotWC = screenshotWC {
+            print("当前存在Screenshot截图窗口控制器，显示它")
             screenshotWC.showScreenshot()  // 显示窗口
         } else {
+            print("当前没有Screenshot截图窗口控制器，创建并显示它")
             screenshotWC = ScreenshotWindowController()
             screenshotWC?.showScreenshot()
         }

@@ -11,6 +11,7 @@ import SwiftUI
 class ScreenshotWindowController: NSWindowController {
     
     init() {
+        print("创建ScreenshotWindowController控制器")
         super.init(window: ScreenshotWindow())
     }
 
